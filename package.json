@@ -4,10 +4,28 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "format:check": "prettier --list-different \"projects/**/*.ts\"",
+    "format:write": "prettier --write \"projects/**/*.ts\"",
+    "build": "npm run build:lib && npm run build:showcase",
+    "build:showcase": "ng build --prod ngx-hot-table-showcase --base-href https://aish0507.github.io/ngx-hot-table/ --deploy-url https://aish0507.github.io/ngx-hot-table/",
+    "publish:demo": "npx angular-cli-ghpages --dir=./dist/ngx-hot-table-showcase",
+    "copy:readme": "copyfiles .../../README.md ./dist/ngx-hot-table",
+    "npm:publish": "npm publish ./dist/ngx-hot-table",
+    "build:lib": "ng build ngx-hot-table --prod  && npm run copy:readme "
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "projects/**/*.ts": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "private": true,
   "dependencies": {
@@ -24,13 +42,17 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "~0.900.7",
+    "@angular-devkit/build-ng-packagr": "~0.900.7",
     "@angular/cli": "~9.0.5",
     "@angular/compiler-cli": "~9.0.5",
     "@angular/language-service": "~9.0.5",
-    "@types/node": "^12.11.1",
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
+    "copyfiles": "^2.3.0",
+    "husky": "^4.2.5",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.3.0",
@@ -38,6 +60,9 @@
     "karma-coverage-istanbul-reporter": "~2.1.0",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
+    "lint-staged": "^10.2.11",
+    "ng-packagr": "^9.0.0",
+    "prettier": "^2.0.5",
     "protractor": "~5.4.3",
     "ts-node": "~8.3.0",
     "tslint": "~5.18.0",
